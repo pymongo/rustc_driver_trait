@@ -1,9 +1,9 @@
 #![feature(rustc_private)]
+extern crate rustc_ast;
 extern crate rustc_driver;
 extern crate rustc_interface;
 extern crate rustc_lint;
 extern crate rustc_lint_defs;
-extern crate rustc_ast;
 extern crate rustc_span;
 
 struct DefaultCallback;
@@ -21,7 +21,7 @@ impl rustc_driver::Callbacks for DefaultCallback {
     }
 }
 
-// 
+//
 /**
 or use rustc_session::declare_lint! macro to define lint
 虽然所有 lint 的定义都在 extern crate rustc_lint_defs 但是实现分散在各处，有的实现都不在 compiler 模块内(例如检测死递归的)
@@ -56,11 +56,16 @@ impl rustc_lint::EarlyLintPass for LintFnNameIsFoo {
         // Ignore FnKind::Closure
         if let rustc_ast::visit::FnKind::Fn(_, ident, ..) = fn_kind {
             if ident.as_str() == "foo" {
-                rustc_lint::LintContext::struct_span_lint(cx, &FN_NAME_IS_FOO_LINT, span, |diagnostic| {
-                    let mut diagnostic = diagnostic.build("foo is a bad name for function");
-                    // docs_link(&mut diagnostic, lint);
-                    diagnostic.emit();
-                });
+                rustc_lint::LintContext::struct_span_lint(
+                    cx,
+                    &FN_NAME_IS_FOO_LINT,
+                    span,
+                    |diagnostic| {
+                        let mut diagnostic = diagnostic.build("foo is a bad name for function");
+                        // docs_link(&mut diagnostic, lint);
+                        diagnostic.emit();
+                    },
+                );
             }
         }
     }
@@ -83,7 +88,7 @@ LD_LIBRARY_PATH="/home/w/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib
 
 */
 fn main() {
-    let args = std::env::args().collect::<Vec<_>>(); 
+    let args = std::env::args().collect::<Vec<_>>();
     rustc_driver::init_rustc_env_logger();
     rustc_driver::RunCompiler::new(&args, &mut DefaultCallback)
         .run()

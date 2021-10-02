@@ -1,6 +1,8 @@
 // #![feature(rustc_private)]
 
+#[allow(dead_code)]
 #[cfg(test)]
-fn foo() {
+fn foo() {}
 
-}
+#[test]
+fn feature() {}
