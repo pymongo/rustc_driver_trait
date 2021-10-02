@@ -22,7 +22,7 @@ fn main() {
     let dylib_path_1 = "/home/w/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib";
     // dylib_path_2 NOT WORKING!
     let dylib_path_2 = "/home/w/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib";
-    println!("cargo:rustc-link-search=all={:?}", dylib_path_1);
+    println!("cargo:rustc-link-search=all={}", path.to_str().unwrap());
 
     for (k,v) in std::env::vars() {
         println!("{}={}", k,v);
